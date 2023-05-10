@@ -36,7 +36,7 @@ export const createTask = asyncHandler(async (req, res) => {
 * @parameters task, taskId
 * @return success message
 ******************************************/
-export const updateTask = async (req, res) => {
+export const updateTask = asyncHandler(async (req, res) => {
     const { task } =  req.body
     const { id } = req.params
 
@@ -60,7 +60,7 @@ export const updateTask = async (req, res) => {
             update
         })
     }    
-}
+})
 
 /******************************************
 * @deleteTask
@@ -70,11 +70,11 @@ export const updateTask = async (req, res) => {
 * @parameters id
 * @return success message
 ******************************************/
-export const deleteTask = async(req, res) => {
+export const deleteTask = asyncHandler(async(req, res) => {
     const { id } = req.params
 
     const task = await taskModel.findById({ _id: id })
-
+   
     if(task) {
         const deleteTask = await taskModel.findByIdAndDelete({ _id: id })
 
@@ -84,7 +84,7 @@ export const deleteTask = async(req, res) => {
             deleteTask
         })
     }
-}
+})
 
 /******************************************
 * @getTask

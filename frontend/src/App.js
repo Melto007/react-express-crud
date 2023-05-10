@@ -8,6 +8,7 @@ function App() {
   const [tasks, setTasks] = useState([])
   const [updateUI, setUpdateUI] = useState(false)
   const [message, setMessage] = useState("")
+  const [updateID, setUpdateID] = useState(null)
 
   useEffect(() => {
     axios.get(`${baseURL}`)
@@ -24,6 +25,10 @@ function App() {
     setUpdateUI((prevState) => !prevState)
   }
 
+  const updateMode = (id, task) => {
+    setInput(task)
+  }
+
   return (
     <main>
       <h1 className="title">CRUD Operation</h1>
@@ -36,7 +41,7 @@ function App() {
 
       <ul>
         {tasks.map((task) => (
-          <List key={task._id} id={task._id} task={task.task} setUpdateUI={setUpdateUI} />
+          <List key={task._id} id={task._id} task={task.task} setUpdateUI={setUpdateUI} setMessage={setMessage} updateMode={updateMode} />
         ))}
       </ul>
 
