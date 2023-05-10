@@ -5,19 +5,23 @@ import { baseURL } from './utils/constant.js'
 
 function App() {
   const [input, setInput] = useState("")
-  const [task, setTask] = useState([])
+  const [tasks, setTasks] = useState([])
+  const [updateUI, setUpdateUI] = useState(false)
   const [message, setMessage] = useState("")
 
   useEffect(() => {
     axios.get(`${baseURL}`)
-    .then((res) => console.log(res.data))
-  }, [])
+    .then((res) => {
+      setTasks(res.data.task)
+    })
+  }, [updateUI])
 
   const submitHandler = (e) => {
     e.preventDefault()
     axios.post(`${baseURL}create`, {'task': input}).then((res) => console.log(res.data))
     .catch(error => setMessage(error.response.data.message))
     setInput('')
+    setUpdateUI((prevState) => !prevState)
   }
 
   return (
@@ -31,7 +35,9 @@ function App() {
       </div>
 
       <ul>
-        <List task="Something" />
+        {tasks.map((task) => (
+          <List key={task._id} id={task._id} task={task.task} setUpdateUI={setUpdateUI} />
+        ))}
       </ul>
 
       {message && (
