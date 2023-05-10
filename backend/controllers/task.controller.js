@@ -40,26 +40,36 @@ export const updateTask = asyncHandler(async (req, res) => {
     const { task } =  req.body
     const { id } = req.params
 
+    if(!task) {
+        throw new CustomError("Task field is required", 400)
+    }
+
+    if(!id) {
+        throw new CustomError("Invalid data", 400)
+    }
+
     const taskExists = await taskModel.findById({ _id: id })
 
-    if(taskExists) {
-        const update = await taskModel.findByIdAndUpdate(
-            id,
-            {
-                task: task
-            },
-            {
-                new: true,
-                runValidators: true
-            }
-        )
+    if(!taskExists) {
+        throw new CustomError("Task not exists", 400)
+    }
+    
+    const update = await taskModel.findByIdAndUpdate(
+        id,
+        {
+            task: task
+        },
+        {
+            new: true,
+            runValidators: true
+        }
+    )
 
-        res.status(200).json({
-            success: true,
-            message: 'Updated successfully',
-            update
-        })
-    }    
+    res.status(200).json({
+        success: true,
+        message: 'Updated successfully',
+        update
+    })
 })
 
 /******************************************

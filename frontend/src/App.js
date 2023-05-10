@@ -27,6 +27,18 @@ function App() {
 
   const updateMode = (id, task) => {
     setInput(task)
+    setUpdateID(id)
+  }
+
+  const UpdateTask = () => {
+    axios.put(`${baseURL}update/${updateID}`, {'task': input})
+    .then((res) => {
+      setMessage(res.data.message)
+      setUpdateUI((prevState => !prevState))
+    })
+    .catch((err) => {
+      setMessage(err.response.data.message)
+    })
   }
 
   return (
@@ -36,7 +48,7 @@ function App() {
       <div className="input_holder">
         <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
 
-        <button type="submit" onClick={submitHandler}>Add Task</button>
+        <button type="submit" onClick={updateID ? UpdateTask : submitHandler}>{updateID ? 'Update Task' : 'Add Task'}</button>
       </div>
 
       <ul>
